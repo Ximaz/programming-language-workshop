@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *strndup(char const *string, size_t length)
+char *strndup(const char *string, size_t length)
 {
     char *block = calloc(length + 1, sizeof(char));
 

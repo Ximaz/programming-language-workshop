@@ -9,10 +9,10 @@
 #include <string.h>
 #include "string_utils.h"
 
-static size_t count_blocks(char const *string, char const *sep, size_t sep_len)
+static size_t count_blocks(const char *string, const char *sep, size_t sep_len)
 {
     size_t count = 1;
-    char const *tmp = strstr(string, sep);
+    const char *tmp = strstr(string, sep);
 
     while (NULL != tmp) {
         tmp = strstr(tmp + sep_len, sep);
@@ -21,9 +21,9 @@ static size_t count_blocks(char const *string, char const *sep, size_t sep_len)
     return count;
 }
 
-static char *new_block(char const *string, char const *sep, size_t *len)
+static char *new_block(const char *string, const char *sep, size_t *len)
 {
-    char const *tmp = strstr(string, sep);
+    const char *tmp = strstr(string, sep);
 
     if (NULL == tmp) {
         *len = 0;
@@ -33,7 +33,7 @@ static char *new_block(char const *string, char const *sep, size_t *len)
     return strndup(string, *len);
 }
 
-char **split(char const *string, char const *sep)
+char **split(const char *string, const char *sep)
 {
     size_t cursor = 0;
     size_t sep_len = strlen(sep);

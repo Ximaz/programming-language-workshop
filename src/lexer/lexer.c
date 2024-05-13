@@ -32,29 +32,6 @@ static uint64_t compute_tokens_count(const char *line)
     return count + (0 < i);
 }
 
-uint64_t run_until_predicate(const char *source, uint64_t start,
-    char predicate)
-{
-    while (0 != source[start] && predicate != source[start])
-        ++start;
-    return start;
-}
-
-uint64_t run_while_predicate(const char *source, uint64_t start,
-    char predicate)
-{
-    while (predicate == source[start])
-        ++start;
-    return start;
-}
-
-void lexer_error(const tokens_t *tokens, const token_location_t *location,
-    const char *error)
-{
-    fprintf(stderr, "%s:%lu:%lu: %s\n", tokens->_filename, location->row,
-        location->col, error);
-}
-
 static uint64_t get_tokens_count(char **lines)
 {
     uint64_t i = 0;
@@ -85,6 +62,29 @@ static void lex_line(tokens_t *tokens, const char *line, uint64_t row)
         tokens_push(tokens, token);
         col = location.col;
     }
+}
+
+uint64_t run_until_predicate(const char *source, uint64_t start,
+    char predicate)
+{
+    while (0 != source[start] && predicate != source[start])
+        ++start;
+    return start;
+}
+
+uint64_t run_while_predicate(const char *source, uint64_t start,
+    char predicate)
+{
+    while (predicate == source[start])
+        ++start;
+    return start;
+}
+
+void lexer_error(const tokens_t *tokens, const token_location_t *location,
+    const char *error)
+{
+    fprintf(stderr, "%s:%lu:%lu: %s\n", tokens->_filename, location->row,
+        location->col, error);
 }
 
 tokens_t *lex_source(const char *filename, const char *source)
