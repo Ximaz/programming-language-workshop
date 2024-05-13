@@ -21,8 +21,7 @@ token_t *lexem_string(const char *line, token_location_t *location)
 
     if (NULL == string)
         return NULL;
-    /* TODO: make sure the offset is correct for the length */
-    strncpy(string, &line[location->col + 1], len - location->col - 2);
+    strncpy(string, &line[location->col + 1], len - location->col - 1);
     value.v_str = string;
     token = token_new(*location, type, value);
     if (NULL == token)
@@ -43,9 +42,9 @@ static token_t *lexem_integer(int64_t num, token_location_t *location)
 
 token_t *lexem_identifier(const char *line, token_location_t *location)
 {
-    token_t *token = NULL;
     char *endp = NULL;
     token_value_t value;
+    token_t *token = NULL;
     uint64_t len = run_until_predicate(line, location->col + 1, ' ');
     char *id = calloc(len, sizeof(char));
 
@@ -53,7 +52,7 @@ token_t *lexem_identifier(const char *line, token_location_t *location)
         return NULL;
     strncpy(id, &line[location->col], len - location->col);
     value.v_int = strtol(id, &endp, 10);
-    if (0 != *endp) {
+    if (0 == *endp) {
         free(id);
         token = lexem_integer(value.v_int, location);
     } else {

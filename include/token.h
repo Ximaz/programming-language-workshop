@@ -7,7 +7,7 @@
 
 #ifndef __TOKEN_H_
     #define __TOKEN_H_
-    #include <stdint.h>
+    #include "types.h"
 
 typedef struct s_token_location {
     uint64_t row;

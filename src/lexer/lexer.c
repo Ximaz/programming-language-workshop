@@ -14,21 +14,22 @@
 
 static uint64_t compute_tokens_count(const char *line)
 {
-    int is_str = 0;
-    uint64_t i = 0;
+    uint64_t j = 0;
+    uint64_t i = run_while_predicate(line, 0, ' ');
     uint64_t count = 0;
 
     for (; 0 != line[i]; ++i) {
-        if (1 == is_str) {
-            is_str = !('"' == line[i]);
-            count += (0 == is_str);
+        if ('"' == line[i]) {
+            j = run_until_predicate(line, i + 1, '"');
+            ++count;
+            i = j + 1;
             continue;
         }
-        if (' ' == line[i])
-            continue;
-        ++count;
+        j = run_while_predicate(line, i, ' ');
+        count += j > i;
+        i = j;
     }
-    return count;
+    return count + (0 < i);
 }
 
 uint64_t run_until_predicate(const char *source, uint64_t start,
@@ -50,7 +51,7 @@ uint64_t run_while_predicate(const char *source, uint64_t start,
 void lexer_error(const tokens_t *tokens, const token_location_t *location,
     const char *error)
 {
-    fprintf(stderr, "%s:%llu:%llu: %s\n", tokens->_filename, location->row,
+    fprintf(stderr, "%s:%lu:%lu: %s\n", tokens->_filename, location->row,
         location->col, error);
 }
 
@@ -77,10 +78,12 @@ static void lex_line(tokens_t *tokens, const char *line, uint64_t row)
             token = lexem_string(line, &location);
         else
             token = lexem_identifier(line, &location);
-        if (NULL == token)
+        if (NULL == token) {
             lexer_error(tokens, &location, "Unknowned token");
-        else
-            tokens_push(tokens, token);
+            break;
+        }
+        tokens_push(tokens, token);
+        col = location.col;
     }
 }
 

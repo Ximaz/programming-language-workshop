@@ -21,7 +21,6 @@ static size_t get_file_size(FILE *fp)
 
 char *read_file(const char *filename)
 {
-    int err = 0;
     size_t size = 0;
     char *source = NULL;
     FILE *fp = fopen(filename, "r");
@@ -34,11 +33,7 @@ char *read_file(const char *filename)
         fclose(fp);
         return NULL;
     }
-    err = 0 > fread(source, size, sizeof(char), fp);
+    fread(source, size, sizeof(char), fp);
     fclose(fp);
-    if (1 == err) {
-        free(source);
-        return NULL;
-    }
     return source;
 }

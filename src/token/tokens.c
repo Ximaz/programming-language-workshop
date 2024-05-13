@@ -44,7 +44,7 @@ void tokens_destroy(tokens_t *self)
     uint64_t i = 0;
 
     if (NULL != self && NULL != self->_tokens) {
-        for (; i < self->_count; ++i)
+        for (; i < self->_idx; ++i)
             token_destroy(self->_tokens[i]);
         free(self->_tokens);
     }
@@ -57,17 +57,17 @@ void tokens_debug(const tokens_t *self)
     token_t *token = NULL;
 
     printf("Tokens for the file %s :\n", self->_filename);
-    for (; NULL != self->_tokens[i]; ++i) {
+    for (; i < self->_idx; ++i) {
         token = self->_tokens[i];
         if (TOKEN_STR == token->type)
-            printf("TokenType: TOKEN_STR | Loc: %llu:%llu | Value: %s\n",
+            printf("TokenType: TOKEN_STR | Loc: %lu:%lu | Value: %s\n",
                 token->location.row, token->location.col, token->value.v_str);
         if (TOKEN_IDENTIFIER == token->type)
-            printf("TokenType: TOKEN_IDENTIFIER | Loc: %llu:%llu | Value: %s\n",
+            printf("TokenType: TOKEN_IDENTIFIER | Loc: %lu:%lu | Value: %s\n",
                 token->location.row, token->location.col, token->value.v_str);
         if (TOKEN_INT == token->type)
-            printf("TokenType: TOKEN_IDENTIFIER | Loc: %llu:%llu | Value: %lld\n",
+            printf("TokenType: TOKEN_INT | Loc: %lu:%lu | Value: %ld\n",
                 token->location.row, token->location.col, token->value.v_int);
     }
-    printf("Tokens count: %llu\n", i);
+    printf("Tokens count: %lu\n", i);
 }

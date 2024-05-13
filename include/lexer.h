@@ -7,6 +7,7 @@
 
 #ifndef __LEXER_H_
     #define __LEXER_H_
+    #include "types.h"
     #include "token.h"
     #define COMMENT "//"
     #define COMMENT_LEN 2
