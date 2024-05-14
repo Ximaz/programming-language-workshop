@@ -64,4 +64,5 @@ void stack_destroy(istack_t *self, void (*destroy_data)(void *))
         self->_stack_ptr = elem;
         --self->_top;
     }
+    free(self);
 }

@@ -76,8 +76,6 @@ int program_execute(ops_t *self)
         if (OP_IF != state._op->type && OP_ELSE != state._op->type &&
             OP_DO != state._op->type && OP_END != state._op->type)
             ++state._pc;
-        /*printf("Program counter: %lu\n", state._pc);
-        debug_memory(state._memory, 100);*/
     }
     stack_destroy(stack, NULL);
     ops_destroy(self);

@@ -46,7 +46,7 @@ $(NAME):	$(OBJS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(OBJS) -o $@
 
 valgrind:	$(NAME)
-	valgrind $(VALGRIND_FLAGS) ./$(NAME) example/turing_complet.src
+	valgrind $(VALGRIND_FLAGS) ./$(NAME) example/turing_complete.src
 
 clean:
 	$(RM) $(OBJS)
