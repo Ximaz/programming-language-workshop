@@ -9,6 +9,9 @@
     #define __PROGRAM_H_
     #include "stack.h"
     #include "op.h"
+    #define STRING_CAPACITY 64000 /* 64kb */
+    #define STACK_CAPACITY 64000  /* 64kb */
+    #define MEMORY_CAPACITY (STRING_CAPACITY + STACK_CAPACITY)
 
 typedef void (*preprocessor_t)(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
 
@@ -21,6 +24,6 @@ ops_t *ops_preprocessor(ops_t *self);
 
 void ops_destroy(ops_t *self);
 
-ops_t *compile_program(tokens_t *tokens);
+ops_t *ops_compiler(tokens_t *tokens);
 
 #endif /* !__PROGRAM_H_ */

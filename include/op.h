@@ -9,13 +9,14 @@
     #define __OP_H_
     #include "token.h"
     #include "types.h"
+    #include "stack.h"
 
 typedef enum e_op_type {
     OP_PUSH_INT,
     OP_PUSH_STR,
     OP_POP,
-    OP_PLUS,
-    OP_MINUS,
+    OP_ADD,
+    OP_SUB,
     OP_DUMP,
     OP_DUP,
     OP_2DUP,
@@ -85,6 +86,8 @@ typedef struct s_ops {
     uint64_t count;
     op_t **ops;
 } ops_t;
+
+typedef int (*op_consumer_t)(istack_t *stack, ...);
 
 op_t *token_to_op(const token_t *token);
 

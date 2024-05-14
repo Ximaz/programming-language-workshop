@@ -22,7 +22,7 @@ static void compile_token(const token_t *token, op_t **op)
     }
 }
 
-ops_t *compile_program(tokens_t *tokens)
+ops_t *ops_compiler(tokens_t *tokens)
 {
     uint64_t i = 0;
     ops_t *ops = malloc(sizeof(ops_t));

@@ -8,7 +8,6 @@
 #ifndef __STACK_H_
     #define __STACK_H_
     #include "types.h"
-    #define STACK_SIZE (2 << 11)
 
 typedef struct s_stack_elem {
     void *_data;
