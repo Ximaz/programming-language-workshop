@@ -10,8 +10,8 @@
     #include "types.h"
 
 typedef struct s_token_location {
-    uint64_t row;
-    uint64_t col;
+    cuint64_t row;
+    cuint64_t col;
 } token_location_t;
 
 typedef enum e_token_type {
@@ -22,7 +22,7 @@ typedef enum e_token_type {
 } token_type_t;
 
 typedef union u_token_value {
-    int64_t v_int;
+    cint64_t v_int;
     char *v_str;
 } token_value_t;
 
@@ -33,8 +33,8 @@ typedef struct s_token {
 } token_t;
 
 typedef struct s_tokens {
-    uint64_t _count;
-    uint64_t _idx;
+    cuint64_t _count;
+    cuint64_t _idx;
     const char *_filename;
     token_t **_tokens;
 } tokens_t;
@@ -44,11 +44,11 @@ token_t *token_new(token_location_t location, token_type_t type,
 
 void token_destroy(token_t *self);
 
-tokens_t *tokens_new(uint64_t count, const char *filename);
+tokens_t *tokens_new(cuint64_t count, const char *filename);
 
 int tokens_push(tokens_t *self, token_t *token);
 
-token_t *tokens_get(tokens_t *self, uint64_t idx);
+token_t *tokens_get(tokens_t *self, cuint64_t idx);
 
 void tokens_destroy(tokens_t *self);
 

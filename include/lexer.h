@@ -12,10 +12,10 @@
     #define COMMENT "//"
     #define COMMENT_LEN 2
 
-uint64_t run_until_predicate(const char *source, uint64_t start,
+cuint64_t run_until_predicate(const char *source, cuint64_t start,
     char predicate);
 
-uint64_t run_while_predicate(const char *source, uint64_t start,
+cuint64_t run_while_predicate(const char *source, cuint64_t start,
     char predicate);
 
 tokens_t *lex_source(const char *filename, const char *source);

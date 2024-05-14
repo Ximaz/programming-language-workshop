@@ -15,7 +15,7 @@ typedef struct s_stack_elem {
 } stack_elem_t;
 
 typedef struct s_stack {
-    uint64_t _top;
+    cuint64_t _top;
     stack_elem_t *_stack_ptr;
 } istack_t;
 

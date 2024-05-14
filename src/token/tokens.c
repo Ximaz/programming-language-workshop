@@ -10,7 +10,7 @@
 #include <string.h>
 #include "token.h"
 
-tokens_t *tokens_new(uint64_t count, const char *filename)
+tokens_t *tokens_new(cuint64_t count, const char *filename)
 {
     tokens_t *self = malloc(sizeof(tokens_t));
 
@@ -32,7 +32,7 @@ int tokens_push(tokens_t *self, token_t *token)
     return 0;
 }
 
-token_t *tokens_get(tokens_t *self, uint64_t idx)
+token_t *tokens_get(tokens_t *self, cuint64_t idx)
 {
     if (self->_count <= idx)
         return NULL;
@@ -41,7 +41,7 @@ token_t *tokens_get(tokens_t *self, uint64_t idx)
 
 void tokens_destroy(tokens_t *self)
 {
-    uint64_t i = 0;
+    cuint64_t i = 0;
 
     if (NULL != self && NULL != self->_tokens) {
         for (; i < self->_idx; ++i)

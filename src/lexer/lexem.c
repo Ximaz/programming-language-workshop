@@ -16,7 +16,7 @@ token_t *lexem_string(const char *line, token_location_t *location)
     token_t *token = NULL;
     token_type_t type = TOKEN_STR;
     token_value_t value;
-    uint64_t len = run_until_predicate(line, location->col + 1, '"');
+    cuint64_t len = run_until_predicate(line, location->col + 1, '"');
     char *string = calloc(len, sizeof(char));
 
     if (NULL == string)
@@ -30,7 +30,7 @@ token_t *lexem_string(const char *line, token_location_t *location)
     return token;
 }
 
-static token_t *lexem_integer(int64_t num, token_location_t *location)
+static token_t *lexem_integer(cint64_t num, token_location_t *location)
 {
     token_value_t value;
 
@@ -40,17 +40,14 @@ static token_t *lexem_integer(int64_t num, token_location_t *location)
     return token_new(*location, TOKEN_INT, value);
 }
 
-token_t *lexem_identifier(const char *line, token_location_t *location)
+static token_t *lexem_either(const char *line, token_location_t *location,
+    char *id, cuint64_t id_len)
 {
-    char *endp = NULL;
     token_value_t value;
+    char *endp = NULL;
     token_t *token = NULL;
-    uint64_t len = run_until_predicate(line, location->col + 1, ' ');
-    char *id = calloc(len + 1, sizeof(char));
 
-    if (NULL == id)
-        return NULL;
-    strncpy(id, &line[location->col], len - location->col);
+    strncpy(id, &line[location->col], id_len - location->col);
     value.v_int = strtol(id, &endp, 10);
     if (0 == *endp) {
         free(id);
@@ -61,6 +58,18 @@ token_t *lexem_identifier(const char *line, token_location_t *location)
         if (NULL == token)
             free(id);
     }
-    location->col = run_while_predicate(line, len, ' ');
+    return token;
+}
+
+token_t *lexem_identifier(const char *line, token_location_t *location)
+{
+    token_t *token = NULL;
+    cuint64_t id_len = run_until_predicate(line, location->col + 1, ' ');
+    char *id = calloc(id_len + 1, sizeof(char));
+
+    if (NULL == id)
+        return NULL;
+    token = lexem_either(line, location, id, id_len);
+    location->col = run_while_predicate(line, id_len, ' ');
     return token;
 }

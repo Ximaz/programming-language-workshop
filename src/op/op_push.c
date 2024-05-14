@@ -10,9 +10,9 @@
 #include "program.h"
 
 static void op_push_string(program_state_t *program_state,
-    uint64_t string_length)
+    cuint64_t string_length)
 {
-    uint64_t addr = 0;
+    cuint64_t addr = 0;
 
     stack_push(program_state->_stack, (void *) string_length);
     addr = STRING_CAPACITY + program_state->_memory_ptr;
@@ -24,11 +24,11 @@ static void op_push_string(program_state_t *program_state,
 
 int op_push(program_state_t *program_state)
 {
-    uint64_t string_length = 0;
+    cuint64_t string_length = 0;
 
     if (OP_PUSH_INT == program_state->_op->type) {
         stack_push(program_state->_stack,
-            (void *) (uint64_t) program_state->_op->value.v_int);
+            (void *) (cuint64_t) program_state->_op->value.v_int);
         return 0;
     }
     string_length = strlen(program_state->_op->value.v_str);

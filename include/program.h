@@ -20,7 +20,11 @@ typedef struct s_preprocessor_bindings {
     preprocessor_t preprocessor;
 } preprocessor_bindings_t;
 
-ops_t *ops_preprocessor(ops_t *self);
+void ops_preprocess_if(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
+void ops_preprocess_else(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
+void ops_preprocess_while(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
+void ops_preprocess_do(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
+void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
 
 void ops_destroy(ops_t *self);
 
@@ -31,8 +35,8 @@ typedef struct s_program_state {
     op_t *_op;
     istack_t *_stack;
     char _memory[MEMORY_CAPACITY];
-    uint64_t _memory_ptr;
-    int64_t _exit_status;
+    cuint64_t _memory_ptr;
+    cint64_t _exit_status;
 } program_state_t;
 
 typedef int (*op_consumer_t)(program_state_t *program_state);

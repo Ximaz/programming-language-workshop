@@ -73,13 +73,13 @@ typedef struct s_op {
      * In case of `else` it's the end of the construction.
      * The default value will be -1, which marks it as unset.
      */
-    int64_t jmp;
+    cint64_t jmp;
 
     /**
      * @brief (`OP_PUSH_STR` op only) Contains the address where the string was
      * pushed in the memory.
      */
-    int64_t addr;
+    cint64_t addr;
 } op_t;
 
 typedef struct s_op_binding {
@@ -88,7 +88,7 @@ typedef struct s_op_binding {
 } op_binding_t;
 
 typedef struct s_ops {
-    uint64_t count;
+    cuint64_t count;
     op_t **ops;
 } ops_t;
 

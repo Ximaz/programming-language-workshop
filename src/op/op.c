@@ -96,7 +96,7 @@ op_t *token_to_op(const token_t *token)
 
 void ops_destroy(ops_t *self)
 {
-    uint64_t i = 0;
+    cuint64_t i = 0;
 
     if (NULL != self && NULL != self->ops) {
         for (; self->count > i; ++i)

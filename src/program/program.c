@@ -58,7 +58,6 @@ int program_execute(ops_t *self)
     state._op = NULL;
     state._stack = stack;
     state._memory_ptr = 0;
-    self = ops_preprocessor(self);
     for (; state._pc < self->count; ++state._pc) {
         state._op = self->ops[state._pc];
         if (0 != OPS_CONSUMERS[state._op->type](&state))

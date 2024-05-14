@@ -11,8 +11,8 @@
 
 int op_load(program_state_t *program_state)
 {
-    uint64_t addr = (uint64_t) stack_pop(program_state->_stack);
-    uint64_t byte = program_state->_memory[addr];
+    cuint64_t addr = (cuint64_t) stack_pop(program_state->_stack);
+    cuint64_t byte = program_state->_memory[addr];
 
     stack_push(program_state->_stack, (void *) byte);
     return 0;

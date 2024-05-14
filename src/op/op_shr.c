@@ -9,9 +9,9 @@
 
 int op_shr(program_state_t *program_state)
 {
-    int64_t a = (int64_t) stack_pop(program_state->_stack);
-    int64_t b = (int64_t) stack_pop(program_state->_stack);
+    cint64_t a = (cint64_t) stack_pop(program_state->_stack);
+    cint64_t b = (cint64_t) stack_pop(program_state->_stack);
 
-    stack_push(program_state->_stack, (void *) (uint64_t) (b >> a));
+    stack_push(program_state->_stack, (void *) (cuint64_t) (b >> a));
     return 0;
 }

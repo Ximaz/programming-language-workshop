@@ -5,13 +5,13 @@
 ** types.h
 */
 
-#ifndef __TYPES_H_
-    #define __TYPES_H_
+#ifndef __CUSTOM_TYPES_H_
+    #define __CUSTOM_TYPES_H_
 
-typedef unsigned long uint64_t;
+typedef unsigned long cuint64_t;
 
-typedef long int64_t;
+typedef long cint64_t;
 
-typedef uint64_t pc_t;
+typedef cuint64_t pc_t;
 
-#endif /* !__TYPES_H_ */
+#endif /* !__CUSTOM_TYPES_H_ */

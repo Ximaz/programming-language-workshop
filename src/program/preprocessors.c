@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** {Workshop} Programming Language
 ** File description:
-** preprocessor.c
+** preprocessors.c
 */
 
 #include <assert.h>
@@ -11,29 +11,12 @@
 #include "stack.h"
 #include "program.h"
 
-static void ops_preprocess_if(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
-static void ops_preprocess_else(ops_t *ops, op_t *op, istack_t *stack,
-    pc_t pc);
-static void ops_preprocess_while(ops_t *ops, op_t *op, istack_t *stack,
-    pc_t pc);
-static void ops_preprocess_do(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
-static void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
-
-static const preprocessor_bindings_t PREPROCESSORS[] = {
-    { OP_IF, ops_preprocess_if },
-    { OP_ELSE, ops_preprocess_else },
-    { OP_WHILE, ops_preprocess_while },
-    { OP_DO, ops_preprocess_do },
-    { OP_END, ops_preprocess_end },
-    { COUNT_OPS, NULL }
-};
-
 /**
  * @brief To preprocess the OP_IF op, we set it's jmp address to itself (AKA
  * the current program counter), and then we will modify it when preprocessing
  * the corresponding OP_ELSE op.
  */
-static void ops_preprocess_if(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
+void ops_preprocess_if(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
 {
     (void)(ops);
     (void)(op);
@@ -48,9 +31,9 @@ static void ops_preprocess_if(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
  * address later on, so that we can escape the OP_ELSE statement in case OP_IF
  * had beed executed.
  */
-static void ops_preprocess_else(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
+void ops_preprocess_else(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
 {
-    uint64_t if_addr = (uint64_t) stack_pop(stack);
+    cuint64_t if_addr = (cuint64_t) stack_pop(stack);
     op_t *op_if = ops->ops[if_addr];
 
     (void)(op);
@@ -64,8 +47,7 @@ static void ops_preprocess_else(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
  * so that when preprocessing the OP_DO op, we can retrieve it to build the
  * loop.
  */
-static void ops_preprocess_while(ops_t *ops, op_t *op, istack_t *stack,
-    pc_t pc)
+void ops_preprocess_while(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
 {
     (void)(ops);
     (void)(op);
@@ -77,9 +59,9 @@ static void ops_preprocess_while(ops_t *ops, op_t *op, istack_t *stack,
  * and we make the OP_DO op pointing to that address, thus creating the loop
  * contorl-flow.
  */
-static void ops_preprocess_do(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
+void ops_preprocess_do(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
 {
-    uint64_t while_addr = (uint64_t) stack_pop(stack);
+    cuint64_t while_addr = (cuint64_t) stack_pop(stack);
     op_t *op_while = ops->ops[while_addr];
 
     assert(op_while->type == OP_WHILE);
@@ -100,9 +82,9 @@ static void ops_preprocess_do(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
  * - we change the OP_END jump's address to the OP_DO's one, which already has
  *   been preprocessed to point to the while's address.
  */
-static void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
+void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
 {
-    uint64_t block_decl_addr = (uint64_t) stack_pop(stack);
+    cuint64_t block_decl_addr = (cuint64_t) stack_pop(stack);
     op_t *block_decl_op = ops->ops[block_decl_addr];
 
     if (OP_IF == block_decl_op->type || OP_ELSE == block_decl_op->type) {
@@ -116,25 +98,4 @@ static void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
         return;
     }
     assert(0);
-}
-
-ops_t *ops_preprocessor(ops_t *self)
-{
-    pc_t pc = 0;
-    op_t *op = NULL;
-    uint64_t i = 0;
-    istack_t *stack = stack_new();
-
-    if (NULL == stack)
-        return self;
-    for (; self->count > pc; ++pc) {
-        op = self->ops[pc];
-        for (i = 0; NULL != PREPROCESSORS[i].preprocessor &&
-            op->type != PREPROCESSORS[i].op; ++i)
-            ;
-        if (NULL != PREPROCESSORS[i].preprocessor)
-            PREPROCESSORS[i].preprocessor(self, op, stack, pc);
-    }
-    stack_destroy(stack, NULL);
-    return self;
 }

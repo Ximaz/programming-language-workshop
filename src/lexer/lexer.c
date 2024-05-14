@@ -12,11 +12,11 @@
 #include "string_utils.h"
 #include "token.h"
 
-static uint64_t compute_tokens_count(const char *line)
+static cuint64_t compute_tokens_count(const char *line)
 {
-    uint64_t j = 0;
-    uint64_t i = run_while_predicate(line, 0, ' ');
-    uint64_t count = 0;
+    cuint64_t j = 0;
+    cuint64_t i = run_while_predicate(line, 0, ' ');
+    cuint64_t count = 0;
 
     for (; 0 != line[i]; ++i) {
         if ('"' == line[i]) {
@@ -32,21 +32,21 @@ static uint64_t compute_tokens_count(const char *line)
     return count + (0 < i);
 }
 
-static uint64_t get_tokens_count(char **lines)
+static cuint64_t get_tokens_count(char **lines)
 {
-    uint64_t i = 0;
-    uint64_t count = 0;
+    cuint64_t i = 0;
+    cuint64_t count = 0;
 
     for (; NULL != lines[i]; ++i)
         count += compute_tokens_count(lines[i]);
     return count;
 }
 
-static void lex_line(tokens_t *tokens, const char *line, uint64_t row)
+static void lex_line(tokens_t *tokens, const char *line, cuint64_t row)
 {
     token_t *token = NULL;
     token_location_t location = { 0, 0 };
-    uint64_t col = run_while_predicate(line, 0, ' ');
+    cuint64_t col = run_while_predicate(line, 0, ' ');
 
     location.row = row;
     while (0 != strncmp(&line[col], COMMENT, COMMENT_LEN) && 0 != line[col]) {
@@ -64,7 +64,7 @@ static void lex_line(tokens_t *tokens, const char *line, uint64_t row)
     }
 }
 
-uint64_t run_until_predicate(const char *source, uint64_t start,
+cuint64_t run_until_predicate(const char *source, cuint64_t start,
     char predicate)
 {
     while (0 != source[start] && predicate != source[start])
@@ -72,7 +72,7 @@ uint64_t run_until_predicate(const char *source, uint64_t start,
     return start;
 }
 
-uint64_t run_while_predicate(const char *source, uint64_t start,
+cuint64_t run_while_predicate(const char *source, cuint64_t start,
     char predicate)
 {
     while (predicate == source[start])
@@ -89,9 +89,9 @@ void lexer_error(const tokens_t *tokens, const token_location_t *location,
 
 tokens_t *lex_source(const char *filename, const char *source)
 {
-    uint64_t i = 0;
+    cuint64_t i = 0;
     tokens_t *tokens = NULL;
-    uint64_t count = 0;
+    cuint64_t count = 0;
     char **lines = split(source, "\n");
 
     if (NULL == lines)
