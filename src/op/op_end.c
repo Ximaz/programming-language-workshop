@@ -9,6 +9,6 @@
 
 int op_end(program_state_t *program_state)
 {
-    program_state->_pc = program_state->_op->jmp;
+    program_state->_pc = program_state->_op->jmp - 1;
     return 0;
 }

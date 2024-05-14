@@ -11,6 +11,23 @@
 #include "stack.h"
 #include "program.h"
 
+static void ops_preprocess_if(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
+static void ops_preprocess_else(ops_t *ops, op_t *op, istack_t *stack,
+    pc_t pc);
+static void ops_preprocess_while(ops_t *ops, op_t *op, istack_t *stack,
+    pc_t pc);
+static void ops_preprocess_do(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
+static void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc);
+
+static const preprocessor_bindings_t PREPROCESSORS[] = {
+    { OP_IF, ops_preprocess_if },
+    { OP_ELSE, ops_preprocess_else },
+    { OP_WHILE, ops_preprocess_while },
+    { OP_DO, ops_preprocess_do },
+    { OP_END, ops_preprocess_end },
+    { COUNT_OPS, NULL }
+};
+
 /**
  * @brief To preprocess the OP_IF op, we set it's jmp address to itself (AKA
  * the current program counter), and then we will modify it when preprocessing
@@ -100,15 +117,6 @@ static void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
     }
     assert(0);
 }
-
-static const preprocessor_bindings_t PREPROCESSORS[] = {
-    { OP_IF, ops_preprocess_if },
-    { OP_ELSE, ops_preprocess_else },
-    { OP_WHILE, ops_preprocess_while },
-    { OP_DO, ops_preprocess_do },
-    { OP_END, ops_preprocess_end },
-    { COUNT_OPS, NULL }
-};
 
 ops_t *ops_preprocessor(ops_t *self)
 {

@@ -5,7 +5,6 @@
 ** program.c
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "program.h"
 #include "stack.h"
@@ -48,15 +47,6 @@ static const op_consumer_t OPS_CONSUMERS[COUNT_OPS] = {
     op_over,
 };
 
-void debug_memory(char *memory, uint64_t range)
-{
-    uint64_t i = 0;
-
-    for (; range > i; ++i)
-        printf("%02x%c", memory[i],((0 < i) && (0 == i % 8)) ? '\n' : ' ');
-    printf("\n\n");
-}
-
 int program_execute(ops_t *self)
 {
     program_state_t state = { 0 };
@@ -69,13 +59,10 @@ int program_execute(ops_t *self)
     state._stack = stack;
     state._memory_ptr = 0;
     self = ops_preprocessor(self);
-    for (; state._pc < self->count;) {
+    for (; state._pc < self->count; ++state._pc) {
         state._op = self->ops[state._pc];
         if (0 != OPS_CONSUMERS[state._op->type](&state))
             break;
-        if (OP_IF != state._op->type && OP_ELSE != state._op->type &&
-            OP_DO != state._op->type && OP_END != state._op->type)
-            ++state._pc;
     }
     stack_destroy(stack, NULL);
     ops_destroy(self);
