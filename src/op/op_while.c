@@ -5,10 +5,10 @@
 ** op_while.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_while(istack_t *stack, ...)
+int op_while(program_state_t *program_state)
 {
-    (void)(stack);
+    (void)(program_state);
     return 0;
 }

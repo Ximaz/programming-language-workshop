@@ -5,15 +5,15 @@
 ** op_over.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_over(istack_t *stack, ...)
+int op_over(program_state_t *program_state)
 {
-    void *b = stack_pop(stack);
-    void *a = stack_pop(stack);
+    void *a = stack_pop(program_state->_stack);
+    void *b = stack_pop(program_state->_stack);
 
-    stack_push(stack, a);
-    stack_push(stack, b);
-    stack_push(stack, a);
+    stack_push(program_state->_stack, b);
+    stack_push(program_state->_stack, a);
+    stack_push(program_state->_stack, b);
     return 0;
 }

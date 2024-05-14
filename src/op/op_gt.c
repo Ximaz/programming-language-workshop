@@ -5,13 +5,13 @@
 ** op_gt.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_gt(istack_t *stack, ...)
+int op_gt(program_state_t *program_state)
 {
-    int64_t b = (int64_t) stack_pop(stack);
-    int64_t a = (int64_t) stack_pop(stack);
+    int64_t a = (int64_t) stack_pop(program_state->_stack);
+    int64_t b = (int64_t) stack_pop(program_state->_stack);
 
-    stack_push(stack, (void *) (unsigned long) (a > b));
+    stack_push(program_state->_stack, (void *) (uint64_t) (b > a));
     return 0;
 }

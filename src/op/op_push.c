@@ -5,32 +5,38 @@
 ** op_push.c
 */
 
-#include <stdarg.h>
-#include "stack.h"
+#include <stdio.h>
+#include <string.h>
+#include "program.h"
 
-int op_push_int(istack_t *stack, ...)
+static void op_push_string(program_state_t *program_state,
+    uint64_t string_length)
 {
-    va_list ap = { 0 };
-    int64_t n = 0;
+    uint64_t addr = 0;
 
-    va_start(ap, stack);
-    n = va_arg(ap, int64_t);
-    va_end(ap);
-    stack_push(stack, (void *) n);
-    return 0;
+    stack_push(program_state->_stack, (void *) string_length);
+    addr = STRING_CAPACITY + program_state->_memory_ptr;
+    stack_push(program_state->_stack, (void *) addr);
+    strncpy(&(program_state->_memory[addr]),
+        program_state->_op->value.v_str, string_length);
+    program_state->_memory_ptr += string_length;
 }
 
-int op_push_str(istack_t *stack, ...)
+int op_push(program_state_t *program_state)
 {
-    va_list ap = { 0 };
-    uint64_t str_addr = 0;
-    uint64_t length = 0;
+    uint64_t string_length = 0;
 
-    va_start(ap, stack);
-    str_addr = va_arg(ap, uint64_t);
-    length = va_arg(ap, uint64_t);
-    va_end(ap);
-    stack_push(stack, (void *) length);
-    stack_push(stack, (void *) str_addr);
+    if (OP_PUSH_INT == program_state->_op->type) {
+        stack_push(program_state->_stack,
+            (void *) (uint64_t) program_state->_op->value.v_int);
+        return 0;
+    }
+    string_length = strlen(program_state->_op->value.v_str);
+    if (STRING_CAPACITY < (program_state->_memory_ptr + string_length)) {
+        fprintf(stderr, "String buffer overflow: '%s' not copied.\n",
+            program_state->_op->value.v_str);
+        return 0;
+    }
+    op_push_string(program_state, string_length);
     return 0;
 }

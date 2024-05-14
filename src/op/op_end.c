@@ -5,10 +5,10 @@
 ** op_end.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_end(istack_t *stack, ...)
+int op_end(program_state_t *program_state)
 {
-    (void)(stack);
+    program_state->_pc = program_state->_op->jmp;
     return 0;
 }

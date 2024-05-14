@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lexer.h"
+#include "program.h"
 #include "string_utils.h"
 
 static int usage(const char *program)
@@ -24,7 +25,7 @@ static int file_error(const char *source)
 
 int main(int argc, const char *argv[])
 {
-    int status = 0;
+    ops_t *ops = NULL;
     char *source = NULL;
     tokens_t *tokens = NULL;
 
@@ -35,7 +36,7 @@ int main(int argc, const char *argv[])
         return file_error(argv[1]);
     tokens = lex_source(*argv, source);
     free(source);
-    tokens_debug(tokens);
+    ops = ops_compiler(tokens);
     tokens_destroy(tokens);
-    return status;
+    return program_execute(ops);
 }

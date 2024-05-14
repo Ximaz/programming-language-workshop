@@ -13,7 +13,7 @@ CFLAGS 		:=	-Wall -Wextra -Werror -pedantic -ansi -fPIE 		 \
 				-fno-strict-aliasing -ftrivial-auto-var-init=zero    \
 				-Wformat -Wimplicit-fallthrough 					 \
 				-U_FORTIFY_SOURCE -D_GLIBCXX_ASSERTIONS 			 \
-				-fstack-protector-strong
+				-fstack-protector-strong -g
 
 ifeq ($(PLATFORM),x86_64)
 CFLAGS		+=	-fcf-protection=full -Wl,-z,nodlopen -Wl,-z,noexecstack \

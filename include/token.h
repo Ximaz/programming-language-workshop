@@ -52,6 +52,4 @@ token_t *tokens_get(tokens_t *self, uint64_t idx);
 
 void tokens_destroy(tokens_t *self);
 
-void tokens_debug(const tokens_t *self);
-
 #endif /* !__TOKEN_H_ */

@@ -5,21 +5,24 @@
 ** compiler.c
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "program.h"
 
-static void compile_token(const token_t *token, op_t **op)
+static op_t *compile_token(const token_t *token)
 {
-    *op = token_to_op(token);
-    if (NULL == *op)
-        return;
+    op_t *op = token_to_op(token);
+
+    if (NULL == op)
+        return NULL;
     if (token->type == TOKEN_STR) {
-        (*op)->value.v_str = token->value.v_str;
-        (*op)->is_value_allocated = 1;
+        op->value.v_str = token->value.v_str;
+        op->is_value_allocated = 1;
     } else if (token->type == TOKEN_INT) {
-        (*op)->value.v_int = token->value.v_int;
-        (*op)->is_value_allocated = 0;
+        op->value.v_int = token->value.v_int;
+        op->is_value_allocated = 0;
     }
+    return op;
 }
 
 ops_t *ops_compiler(tokens_t *tokens)
@@ -29,13 +32,13 @@ ops_t *ops_compiler(tokens_t *tokens)
 
     if (NULL == ops)
         return NULL;
-    ops->count = tokens->_count;
+    ops->count = tokens->_idx;
     ops->ops = malloc(sizeof(op_t *) * ops->count);
     if (NULL == ops->ops) {
         free(ops);
         return NULL;
     }
-    for (; tokens->_count > i; ++i)
-        compile_token(tokens->_tokens[i], &(ops->ops[i]));
+    for (; tokens->_idx > i; ++i)
+        ops->ops[i] = compile_token(tokens->_tokens[i]);
     return ops;
 }

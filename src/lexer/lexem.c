@@ -46,7 +46,7 @@ token_t *lexem_identifier(const char *line, token_location_t *location)
     token_value_t value;
     token_t *token = NULL;
     uint64_t len = run_until_predicate(line, location->col + 1, ' ');
-    char *id = calloc(len, sizeof(char));
+    char *id = calloc(len + 1, sizeof(char));
 
     if (NULL == id)
         return NULL;

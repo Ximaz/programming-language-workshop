@@ -5,9 +5,15 @@
 ** op_if.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_if(istack_t *stack, ...)
+int op_if(program_state_t *program_state)
 {
-    return (0 == (uint64_t) stack_pop(stack));
+    int jmp = (0 == (uint64_t) stack_pop(program_state->_stack));
+
+    if (jmp)
+        program_state->_pc = program_state->_op->jmp;
+    else
+        ++program_state->_pc;
+    return 0;
 }

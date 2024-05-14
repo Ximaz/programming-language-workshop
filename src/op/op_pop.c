@@ -5,10 +5,10 @@
 ** op_pop.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_pop(istack_t *stack, ...)
+int op_pop(program_state_t *program_state)
 {
-    return (uint64_t) stack_pop(stack);
+    stack_pop(program_state->_stack);
     return 0;
 }

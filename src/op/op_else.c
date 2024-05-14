@@ -5,10 +5,10 @@
 ** op_else.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_else(istack_t *stack, ...)
+int op_else(program_state_t *program_state)
 {
-    (void)(stack);
+    program_state->_pc = program_state->_op->jmp;
     return 0;
 }

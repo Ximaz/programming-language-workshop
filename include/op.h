@@ -82,12 +82,15 @@ typedef struct s_op {
     int64_t addr;
 } op_t;
 
+typedef struct s_op_binding {
+    const char *identifier;
+    op_type_t op;
+} op_binding_t;
+
 typedef struct s_ops {
     uint64_t count;
     op_t **ops;
 } ops_t;
-
-typedef int (*op_consumer_t)(istack_t *stack, ...);
 
 op_t *token_to_op(const token_t *token);
 

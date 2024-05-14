@@ -19,7 +19,7 @@
 static void ops_preprocess_if(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
 {
     (void)(ops);
-    op->jmp = pc;
+    (void)(op);
     stack_push(stack, (void *) pc);
 }
 
@@ -36,10 +36,10 @@ static void ops_preprocess_else(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
     uint64_t if_addr = (uint64_t) stack_pop(stack);
     op_t *op_if = ops->ops[if_addr];
 
+    (void)(op);
     assert(OP_IF == op_if->type);
     op_if->jmp = pc + 1;
-    op->jmp = pc;
-    stack_push(stack, (void *) op->jmp);
+    stack_push(stack, (void *) pc);
 }
 
 /**
@@ -85,19 +85,20 @@ static void ops_preprocess_do(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
  */
 static void ops_preprocess_end(ops_t *ops, op_t *op, istack_t *stack, pc_t pc)
 {
-    uint64_t end_addr = (uint64_t) stack_pop(stack);
-    op_t *op_end = ops->ops[end_addr];
+    uint64_t block_decl_addr = (uint64_t) stack_pop(stack);
+    op_t *block_decl_op = ops->ops[block_decl_addr];
 
-    if (OP_IF == op_end->type || OP_ELSE == op_end->type) {
-        op_end->jmp = pc;
-        assert(ops->ops[end_addr]->jmp == op_end->jmp);
-        op->jmp = pc;
-    } else if (op_end->type == OP_DO) {
-        op->jmp = op_end->jmp;
-        assert(ops->ops[pc]->jmp == op->jmp);
-        op_end->jmp = pc;
-    } else
-        assert(0);
+    if (OP_IF == block_decl_op->type || OP_ELSE == block_decl_op->type) {
+        block_decl_op->jmp = pc;
+        op->jmp = pc + 1;
+        return;
+    }
+    if (OP_DO == block_decl_op->type) {
+        op->jmp = block_decl_op->jmp;
+        block_decl_op->jmp = pc + 1;
+        return;
+    }
+    assert(0);
 }
 
 static const preprocessor_bindings_t PREPROCESSORS[] = {
@@ -118,9 +119,10 @@ ops_t *ops_preprocessor(ops_t *self)
 
     if (NULL == stack)
         return self;
-    for (; pc < self->count; ++pc) {
+    for (; self->count > pc; ++pc) {
         op = self->ops[pc];
-        for (i = 0; op->type != PREPROCESSORS[i].op; ++i)
+        for (i = 0; NULL != PREPROCESSORS[i].preprocessor &&
+            op->type != PREPROCESSORS[i].op; ++i)
             ;
         if (NULL != PREPROCESSORS[i].preprocessor)
             PREPROCESSORS[i].preprocessor(self, op, stack, pc);

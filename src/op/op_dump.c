@@ -6,10 +6,10 @@
 */
 
 #include <stdio.h>
-#include "stack.h"
+#include "program.h"
 
-int op_dump(istack_t *stack, ...)
+int op_dump(program_state_t *program_state)
 {
-    printf("%ld\n", (int64_t) stack_pop(stack));
+    printf("%ld\n", (int64_t) stack_pop(program_state->_stack));
     return 0;
 }

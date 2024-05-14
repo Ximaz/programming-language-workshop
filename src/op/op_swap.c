@@ -5,14 +5,14 @@
 ** op_swap.c
 */
 
-#include "stack.h"
+#include "program.h"
 
-int op_swap(istack_t *stack, ...)
+int op_swap(program_state_t *program_state)
 {
-    void *a = stack_pop(stack);
-    void *b = stack_pop(stack);
+    void *a = stack_pop(program_state->_stack);
+    void *b = stack_pop(program_state->_stack);
 
-    stack_push(stack, a);
-    stack_push(stack, b);
+    stack_push(program_state->_stack, a);
+    stack_push(program_state->_stack, b);
     return 0;
 }

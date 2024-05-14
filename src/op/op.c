@@ -10,49 +10,50 @@
 #include <string.h>
 #include "op.h"
 
-static const char *OPS[COUNT_OPS] = {
-    "pop",
-    "+",
-    "-",
-    "dump",
-    "dup",
-    "2dup",
-    "=",
-    "!=",
-    ">",
-    "<",
-    ">=",
-    "<=",
-    "if",
-    "else",
-    "while",
-    "do",
-    "end",
-    "mem",
-    "store",
-    "load",
-    "syscall0",
-    "syscall1",
-    "syscall2",
-    "syscall3",
-    "syscall4",
-    "syscall5",
-    "syscall6",
-    "shl",
-    "shr",
-    "orb",
-    "andb",
-    "swap",
-    "over",
+static const op_binding_t OPS[] = {
+    { "pop", OP_POP },
+    { "+", OP_ADD },
+    { "-", OP_SUB },
+    { "dump", OP_DUMP },
+    { "dup", OP_DUP },
+    { "2dup", OP_2DUP },
+    { "=", OP_EQUAL },
+    { "!=", OP_DIFF },
+    { ">", OP_GT },
+    { "<", OP_LT },
+    { ">=", OP_GOET },
+    { "<=", OP_LOET },
+    { "if", OP_IF },
+    { "else", OP_ELSE },
+    { "while", OP_WHILE },
+    { "do", OP_DO },
+    { "end", OP_END },
+    { "mem", OP_MEM },
+    { "store", OP_STORE },
+    { "load", OP_LOAD },
+    { "syscall0", OP_SYSCALL0 },
+    { "syscall1", OP_SYSCALL1 },
+    { "syscall2", OP_SYSCALL2 },
+    { "syscall3", OP_SYSCALL3 },
+    { "syscall4", OP_SYSCALL4 },
+    { "syscall5", OP_SYSCALL5 },
+    { "syscall6", OP_SYSCALL6 },
+    { "shl", OP_SHL },
+    { "shr", OP_SHR },
+    { "orb", OP_ORB },
+    { "andb", OP_ANDB },
+    { "swap", OP_SWAP },
+    { "over", OP_OVER },
+    { NULL, -1 }
 };
 
 static op_type_t find_op_type(const char *identifier)
 {
     op_type_t i = 0;
 
-    for (; COUNT_OPS > i; ++i)
-        if (0 == strcmp(OPS[i], identifier))
-            return i;
+    for (; NULL != OPS[i].identifier; ++i)
+        if (0 == strcmp(OPS[i].identifier, identifier))
+            return OPS[i].op;
     return COUNT_OPS;
 }
 
@@ -73,7 +74,6 @@ static void op_init(op_t *self, const token_t *token)
     self->value = token->value;
     self->location = token->location;
     self->jmp = -1;
-    self->addr = -1;
 }
 
 op_t *token_to_op(const token_t *token)
@@ -99,7 +99,7 @@ void ops_destroy(ops_t *self)
     uint64_t i = 0;
 
     if (NULL != self && NULL != self->ops) {
-        for (; i < self->count; ++i)
+        for (; self->count > i; ++i)
             free(self->ops[i]);
         free(self->ops);
     }
