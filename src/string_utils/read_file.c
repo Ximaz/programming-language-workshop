@@ -29,11 +29,8 @@ char *read_file(const char *filename)
         return NULL;
     size = get_file_size(fp);
     source = calloc(size + 1, sizeof(char));
-    if (NULL == source) {
-        fclose(fp);
-        return NULL;
-    }
-    fread(source, size, sizeof(char), fp);
+    if (NULL != source)
+        fread(source, size, sizeof(char), fp);
     fclose(fp);
     return source;
 }
