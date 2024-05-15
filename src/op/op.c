@@ -74,6 +74,7 @@ static void op_init(op_t *self, const token_t *token)
     self->value = token->value;
     self->location = token->location;
     self->jmp = -1;
+    self->addr = -1;
 }
 
 op_t *token_to_op(const token_t *token)
