@@ -25,6 +25,7 @@ static int file_error(const char *source)
 
 int main(int argc, const char *argv[])
 {
+    int exit_status = 0;
     ops_t *ops = NULL;
     char *source = NULL;
     tokens_t *tokens = NULL;
@@ -37,6 +38,7 @@ int main(int argc, const char *argv[])
     tokens = lex_source(*argv, source);
     free(source);
     ops = ops_compiler(tokens);
+    exit_status = program_execute(ops);
     tokens_destroy(tokens);
-    return program_execute(ops);
+    return exit_status;
 }

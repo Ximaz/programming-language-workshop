@@ -5,6 +5,7 @@
 ** op_syscall.c
 */
 
+#include <stdio.h>
 #include <unistd.h>
 #include "program.h"
 

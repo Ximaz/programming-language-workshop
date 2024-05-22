@@ -1,0 +1,2 @@
+13 "Hello World !" 1 1 syscall3
+mem 10 store 1 mem 1 1 syscall3
