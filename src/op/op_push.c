@@ -35,7 +35,8 @@ int op_push(program_state_t *program_state)
     if (STRING_CAPACITY < (program_state->_memory_ptr + string_length)) {
         fprintf(stderr, "String buffer overflow: '%s' not copied.\n",
             program_state->_op->value.v_str);
-        return 0;
+        program_state->_exit_status = -1;
+        return -1;
     }
     op_push_string(program_state, string_length);
     return 0;
